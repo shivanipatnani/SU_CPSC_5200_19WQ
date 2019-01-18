@@ -13,6 +13,11 @@ namespace restapi.Models
     {
     }
 
+    public class Remove : Event
+    { 
+    
+    }
+
     public class Cancellation : Event
     {
         public string Reason { get; set; }        

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace restapi.Models
 {
@@ -167,35 +166,23 @@ namespace restapi.Models
             return annotatedLine;
         }
 
-        public bool CanBeDeleted()
+        public AnnotatedTimecardLine UpdateLine(string LineId, TimecardLine timecardLine)
         {
-            return (Status == TimecardStatus.Cancelled || Status == TimecardStatus.Draft);
+            Guid UpdatelineId = Guid.Parse(LineId);
+            var annotatedLine = Lines.FirstOrDefault(k => k.UniqueIdentifier == UpdatelineId);
+            if(annotatedLine == null)
+            {
+                return null;
+            }
+            annotatedLine.Week = timecardLine.Week;
+            annotatedLine.Year = timecardLine.Year;
+            annotatedLine.Day = timecardLine.Day;
+            annotatedLine.Hours = timecardLine.Hours;
+            annotatedLine.Project = timecardLine.Project;
+
+            return annotatedLine;
         }
 
-        public bool HasLine(Guid lineId)
-        {
-            return Lines
-                .Any(l => l.UniqueIdentifier == lineId);
-        }
 
-        public TimecardLine ReplaceLine(Guid lineId, TimecardLine line)
-        {
-            var targetLine = Lines
-                .FirstOrDefault(l => l.UniqueIdentifier == lineId);
-
-            // this should blindly replace the public portions of
-            // the line, which might leave the line in a bad state
-            return targetLine.Update(line);
-        }
-
-        public TimecardLine ReplaceLine(Guid lineId, JObject line)
-        {
-            var targetLine = Lines
-                .FirstOrDefault(l => l.UniqueIdentifier == lineId);
-
-            // this should blindly replace the public portions of
-            // the line, which might leave the line in a bad state
-            return targetLine.Update(line);
-        }
     }
 }
