@@ -166,10 +166,10 @@ namespace restapi.Models
             return annotatedLine;
         }
 
-        public AnnotatedTimecardLine UpdateLine(string LineId, TimecardLine timecardLine)
+        public AnnotatedTimecardLine ReplaceLine(string LineId, TimecardLine timecardLine)
         {
-            Guid UpdatelineId = Guid.Parse(LineId);
-            var annotatedLine = Lines.FirstOrDefault(k => k.UniqueIdentifier == UpdatelineId);
+
+            var annotatedLine = Lines.FirstOrDefault(k => k.UniqueIdentifier.ToString() == LineId);
             if(annotatedLine == null)
             {
                 return null;
@@ -183,6 +183,38 @@ namespace restapi.Models
             return annotatedLine;
         }
 
+        public AnnotatedTimecardLine UpdateLine(string LineId, TimecardLine timecardLine)
+        {
+
+            var annotatedLine = Lines.FirstOrDefault(k => k.UniqueIdentifier.ToString() == LineId);
+            if (annotatedLine == null)
+            {
+                return null;
+            }
+            if (timecardLine.Week > 0)
+            {
+                annotatedLine.Week = timecardLine.Week;
+            }
+            if (timecardLine.Year > 0)
+            {
+                annotatedLine.Year = timecardLine.Year;
+            }
+            if (timecardLine.Day > 0)
+            {
+                annotatedLine.Day = timecardLine.Day;
+            }
+            if (timecardLine.Hours > 0)
+            {
+                annotatedLine.Hours = timecardLine.Hours;
+            }
+            if (timecardLine.Project != "string")
+            {
+                annotatedLine.Project = timecardLine.Project;
+            }
+           
+
+            return annotatedLine;
+        }
 
     }
 }

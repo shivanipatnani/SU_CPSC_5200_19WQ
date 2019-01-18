@@ -128,7 +128,7 @@ namespace restapi.Controllers
       
 
         [HttpPost("{timecardId}/lines/{lineId}")]
-        public IActionResult UpdateLine(string timecardId, string lineId, [FromBody] TimecardLine timecardLine)
+        public IActionResult ReplaceLine(string timecardId, string lineId, [FromBody] TimecardLine timecardLine)
         {
             Timecard timecard = Database.Find(timecardId);
 
@@ -137,7 +137,7 @@ namespace restapi.Controllers
                 return NotFound();
             }
 
-            var annotatedLine = timecard.UpdateLine(lineId, timecardLine);
+            var annotatedLine = timecard.ReplaceLine(lineId, timecardLine);
 
             if(annotatedLine == null)
             {
@@ -150,6 +150,30 @@ namespace restapi.Controllers
             }
 
         }
+        [HttpPatch("{timecardId}/lines/{lineId}")]
+        public IActionResult UpdateLine(string timecardId, string lineId, [FromBody] TimecardLine timecardLine)
+        {
+            Timecard timecard = Database.Find(timecardId);
+
+            if (timecard == null)
+            {
+                return NotFound();
+            }
+
+            var annotatedLine = timecard.UpdateLine(lineId, timecardLine);
+
+            if (annotatedLine == null)
+            {
+                return NotFound();
+            }
+
+            else
+            {
+                return Ok(annotatedLine);
+            }
+
+        }
+
 
 
 
